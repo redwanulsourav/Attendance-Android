@@ -1,47 +1,77 @@
 package com.example.redwanulsourav.attendance;
 
+import android.app.LauncherActivity;
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.ListView;
+import android.widget.TextView;
+
+import com.google.gson.Gson;
+
+import java.util.ArrayList;
+import java.util.Map;
 
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link StudentStatistics.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link StudentStatistics#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class StudentStatistics extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
 
     private OnFragmentInteractionListener mListener;
 
+    View inflatedView;
+
+    private class CoursesCustomAdapter extends ArrayAdapter<CoursePOJO>{
+        Context mContext;
+        ArrayList<CoursePOJO> dataSet;
+        CoursesCustomAdapter(Context mContext, ArrayList<CoursePOJO> data) {
+            super(mContext, 0, data);
+            this.dataSet = data;
+            this.mContext = mContext;
+        }
+
+        @NonNull
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent){
+            View listItem = convertView;
+            if(listItem == null){
+                listItem = LayoutInflater.from(mContext).inflate(R.layout.course_list_item,parent,false);
+            }
+            final CoursePOJO current = dataSet.get(position);
+
+            TextView tv = (TextView) listItem.findViewById(R.id.item_textview);
+            tv.setText(current.getCourseNumber());
+
+
+            Button button = (Button) listItem.findViewById(R.id.item_view_button);
+            button.setOnClickListener(
+                    new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent intent = new Intent(getContext(),ViewCourse.class);
+                            Gson gson = new Gson();
+                            intent.putExtra("courseInfo",gson.toJson(current));
+                            startActivity(intent);
+                        }
+                    }
+            );
+            return listItem;
+        }
+
+    }
     public StudentStatistics() {
-        // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment StudentStatistics.
-     */
-    // TODO: Rename and change types and number of parameters
     public static StudentStatistics newInstance(String param1, String param2) {
         StudentStatistics fragment = new StudentStatistics();
         Bundle args = new Bundle();
@@ -63,11 +93,26 @@ public class StudentStatistics extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_student_statistics, container, false);
+        inflatedView = inflater.inflate(R.layout.fragment_student_statistics, container, false);
+
+        ListView listView = (ListView) inflatedView.findViewById(R.id.listview2);
+        ArrayList < CoursePOJO > arr = new ArrayList<>();
+
+        for(Map.Entry<String,String> entry: GlobalData.loggedInUser.getCourses().entrySet()){
+            arr.add(new CoursePOJO(GlobalData.course_details.get(entry.getValue()),entry.getValue()));
+        }
+        /*
+        arr.add(new CoursePOJO("CSE3200","System Development Project"));
+        arr.add(new CoursePOJO("CSE3201","Compiler Design"));
+        arr.add(new CoursePOJO("HUM3207","Humanities & Government"));
+        arr.add(new CoursePOJO("CSE3200","System Development Project"));
+        */
+        CoursesCustomAdapter customAdapter = new CoursesCustomAdapter(getContext(),arr);
+
+        listView.setAdapter(customAdapter);
+        return inflatedView;
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
             mListener.onFragmentInteraction(uri);
@@ -81,7 +126,7 @@ public class StudentStatistics extends Fragment {
             mListener = (OnFragmentInteractionListener) context;
         } else {
             throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
+                    + " must implement com.example.redwanulsourav.attendance.OnFragmentInteractionListener");
         }
     }
 
@@ -89,20 +134,5 @@ public class StudentStatistics extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
-    }
-
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
     }
 }
