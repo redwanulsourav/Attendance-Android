@@ -7,13 +7,13 @@ public class Person {
     private String lastName;
     private String email;
     private String id;
-    private Integer roll;
+    private String roll;
 
-    public Integer getRoll() {
+    public String getRoll() {
         return roll;
     }
 
-    public void setRoll(Integer roll) {
+    public void setRoll(String roll) {
         this.roll = roll;
     }
 

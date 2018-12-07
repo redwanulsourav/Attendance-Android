@@ -48,7 +48,10 @@ public class ShowStudentList extends AppCompatActivity {
             final Person current = dataSet.get(position);
 
             TextView tv = (TextView) listItem.findViewById(R.id.student_name);
+            TextView tv2 = (TextView) listItem.findViewById(R.id.student_roll);
+
             tv.setText(current.getFirstName());
+            tv2.setText(current.getRoll());
 
             /*
             Button button = (Button) listItem.findViewById(R.id.item_view_button);
@@ -95,11 +98,13 @@ public class ShowStudentList extends AppCompatActivity {
                                             temp.setFirstName(dataSnapshot.child("first_name").getValue(String.class));
                                             temp.setLastName(dataSnapshot.child("last_name").getValue(String.class));
                                             temp.setEmail(dataSnapshot.child("email").getValue(String.class));
+                                            temp.setRoll(dataSnapshot.child("roll").getValue(String.class));
                                             persons.add(temp);
                                             adap = new ShowStudentCustomAdapter(ShowStudentList.this,persons);
                                             listView.setAdapter(adap);
                                             Log.d("hello","first_name: "+temp.getFirstName());
                                             Log.d("hello","last_name: "+temp.getLastName());
+                                            Log.d("hello","roll: "+temp.getRoll());
                                         }
 
                                         @Override
