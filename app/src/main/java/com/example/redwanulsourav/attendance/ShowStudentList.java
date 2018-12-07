@@ -1,6 +1,7 @@
 package com.example.redwanulsourav.attendance;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.support.annotation.NonNull;
@@ -10,6 +11,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -99,7 +101,15 @@ public class ShowStudentList extends AppCompatActivity {
         course = new Gson().fromJson(getIntent().getStringExtra("courseInfo"), CoursePOJO.class);
         db = FirebaseDatabase.getInstance().getReference();
         listView = findViewById(R.id.listView3);
-
+        listView.setOnItemClickListener(
+                new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        Intent intent = new Intent(ShowStudentList.this,ShowStudentStatistics.class);
+                        startActivity(intent);
+                    }
+                }
+        );
         db.child("course_students").child(course.getCourseNumber()).addListenerForSingleValueEvent(
                 new ValueEventListener() {
                     @Override

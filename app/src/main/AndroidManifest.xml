@@ -52,7 +52,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ShowStudentList"></activity>
+        <activity android:name=".ShowStudentList" />
+        <activity android:name=".ShowStudentStatistics"></activity>
     </application>
 
 </manifest>
