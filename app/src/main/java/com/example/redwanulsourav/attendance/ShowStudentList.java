@@ -106,6 +106,8 @@ public class ShowStudentList extends AppCompatActivity {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                         Intent intent = new Intent(ShowStudentList.this,ShowStudentStatistics.class);
+                        intent.putExtra("courseInfo",new Gson().toJson(course));
+                        intent.putExtra("studentInfo",new Gson().toJson(persons.get(position)));
                         startActivity(intent);
                     }
                 }
