@@ -18,6 +18,7 @@ import android.widget.TextView;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 
 public class Courses extends Fragment {
@@ -49,7 +50,7 @@ public class Courses extends Fragment {
             final CoursePOJO current = dataSet.get(position);
 
             TextView tv = (TextView) listItem.findViewById(R.id.item_textview);
-            tv.setText(current.getCourseName());
+            tv.setText(current.getCourseNumber());
 
 
             Button button = (Button) listItem.findViewById(R.id.item_view_button);
@@ -96,11 +97,16 @@ public class Courses extends Fragment {
 
         ListView listView = (ListView) inflatedView.findViewById(R.id.listview);
         ArrayList < CoursePOJO > arr = new ArrayList<>();
+
+        for(Map.Entry<String,String> entry: GlobalData.loggedInUser.getCourses().entrySet()){
+            arr.add(new CoursePOJO(GlobalData.course_details.get(entry.getValue()),entry.getValue()));
+        }
+        /*
         arr.add(new CoursePOJO("CSE3200","System Development Project"));
         arr.add(new CoursePOJO("CSE3201","Compiler Design"));
         arr.add(new CoursePOJO("HUM3207","Humanities & Government"));
         arr.add(new CoursePOJO("CSE3200","System Development Project"));
-
+        */
         CoursesCustomAdapter customAdapter = new CoursesCustomAdapter(getContext(),arr);
 
         listView.setAdapter(customAdapter);
