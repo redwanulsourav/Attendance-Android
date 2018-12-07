@@ -8,6 +8,26 @@ public class Person {
     private String email;
     private String id;
     private String roll;
+    private byte[] image;
+
+
+    public String getHas_image() {
+        return has_image;
+    }
+
+    public void setHas_image(String has_image) {
+        this.has_image = has_image;
+    }
+
+    private String has_image;
+
+    public byte[] getImage() {
+        return image;
+    }
+
+    public void setImage(byte[] image) {
+        this.image = image;
+    }
 
     public String getRoll() {
         return roll;
