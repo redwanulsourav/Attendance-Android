@@ -7,6 +7,16 @@ public class Person {
     private String lastName;
     private String email;
     private String id;
+    private Integer roll;
+
+    public Integer getRoll() {
+        return roll;
+    }
+
+    public void setRoll(Integer roll) {
+        this.roll = roll;
+    }
+
     Map<String,String> courses;
 
     public Map<String, String> getCourses() {

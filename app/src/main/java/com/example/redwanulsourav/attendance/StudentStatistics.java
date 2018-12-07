@@ -7,9 +7,11 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
@@ -28,6 +30,7 @@ public class StudentStatistics extends Fragment {
     private String mParam2;
 
     private OnFragmentInteractionListener mListener;
+    private ArrayList < CoursePOJO > arr = new ArrayList<>();
 
     View inflatedView;
 
@@ -52,7 +55,7 @@ public class StudentStatistics extends Fragment {
             TextView tv = (TextView) listItem.findViewById(R.id.item_textview);
             tv.setText(current.getCourseNumber());
 
-
+            /*
             Button button = (Button) listItem.findViewById(R.id.item_view_button);
             button.setOnClickListener(
                     new View.OnClickListener() {
@@ -65,6 +68,7 @@ public class StudentStatistics extends Fragment {
                         }
                     }
             );
+            */
             return listItem;
         }
 
@@ -77,6 +81,7 @@ public class StudentStatistics extends Fragment {
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
+
         fragment.setArguments(args);
         return fragment;
     }
@@ -96,7 +101,6 @@ public class StudentStatistics extends Fragment {
         inflatedView = inflater.inflate(R.layout.fragment_student_statistics, container, false);
 
         ListView listView = (ListView) inflatedView.findViewById(R.id.listview2);
-        ArrayList < CoursePOJO > arr = new ArrayList<>();
 
         for(Map.Entry<String,String> entry: GlobalData.loggedInUser.getCourses().entrySet()){
             arr.add(new CoursePOJO(GlobalData.course_details.get(entry.getValue()),entry.getValue()));
@@ -108,8 +112,20 @@ public class StudentStatistics extends Fragment {
         arr.add(new CoursePOJO("CSE3200","System Development Project"));
         */
         CoursesCustomAdapter customAdapter = new CoursesCustomAdapter(getContext(),arr);
-
+        Log.d("hello","Student Statistics");
         listView.setAdapter(customAdapter);
+        listView.setOnItemClickListener(
+                new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        Log.d("hello","called");
+                        Intent intent = new Intent(getContext(),ShowStudentList.class);
+                        Gson gson = new Gson();
+                        intent.putExtra("courseInfo",gson.toJson(arr.get(position)));
+                        startActivity(intent);
+                    }
+                }
+        );
         return inflatedView;
     }
 

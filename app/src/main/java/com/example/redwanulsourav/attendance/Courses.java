@@ -7,9 +7,11 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
@@ -28,6 +30,7 @@ public class Courses extends Fragment {
     private String mParam2;
 
     private OnFragmentInteractionListener mListener;
+    private ArrayList < CoursePOJO > arr = new ArrayList<>();
 
     View inflatedView;
 
@@ -52,7 +55,7 @@ public class Courses extends Fragment {
             TextView tv = (TextView) listItem.findViewById(R.id.item_textview);
             tv.setText(current.getCourseNumber());
 
-
+            /*
             Button button = (Button) listItem.findViewById(R.id.item_view_button);
             button.setOnClickListener(
                     new View.OnClickListener() {
@@ -65,6 +68,7 @@ public class Courses extends Fragment {
                         }
                     }
             );
+            */
             return listItem;
         }
 
@@ -96,7 +100,6 @@ public class Courses extends Fragment {
         inflatedView = inflater.inflate(R.layout.fragment_courses, container, false);
 
         ListView listView = (ListView) inflatedView.findViewById(R.id.listview);
-        ArrayList < CoursePOJO > arr = new ArrayList<>();
 
         for(Map.Entry<String,String> entry: GlobalData.loggedInUser.getCourses().entrySet()){
             arr.add(new CoursePOJO(GlobalData.course_details.get(entry.getValue()),entry.getValue()));
@@ -110,6 +113,18 @@ public class Courses extends Fragment {
         CoursesCustomAdapter customAdapter = new CoursesCustomAdapter(getContext(),arr);
 
         listView.setAdapter(customAdapter);
+        listView.setOnItemClickListener(
+                new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        Log.d("hello","called");
+                        Intent intent = new Intent(getContext(),ViewCourse.class);
+                        Gson gson = new Gson();
+                        intent.putExtra("courseInfo",gson.toJson(arr.get(position)));
+                        startActivity(intent);
+                    }
+                }
+        );
         return inflatedView;
     }
 
