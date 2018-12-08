@@ -53,7 +53,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".ShowStudentList" />
-        <activity android:name=".ShowStudentStatistics"></activity>
+        <activity android:name=".ShowStudentStatistics" />
+        <activity android:name=".ShowResult"></activity>
     </application>
 
 </manifest>

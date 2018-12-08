@@ -39,8 +39,8 @@ public class ShowStudentStatistics extends AppCompatActivity {
 
         PieChartView pieChartView = findViewById(R.id.chart);
         List<SliceValue> pieData = new ArrayList<>();
-        pieData.add(new SliceValue(10, 0xFF009900));
-        pieData.add(new SliceValue(10, 0xFFAA0000));
+        pieData.add(new SliceValue(15, 0xFF009900));
+        pieData.add(new SliceValue(5, 0xFFAA0000));
 
         PieChartData pieChartData = new PieChartData(pieData);
         pieChartView.setPieChartData(pieChartData);

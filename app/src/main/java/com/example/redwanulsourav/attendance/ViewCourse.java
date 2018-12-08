@@ -97,7 +97,7 @@ public class ViewCourse extends AppCompatActivity {
         CoursePOJO course = new Gson().fromJson(getIntent().getStringExtra("courseInfo"), CoursePOJO.class);
         courseNumber = (TextView) findViewById(R.id.view_course_course_number);
         courseName = (TextView) findViewById(R.id.view_course_course_name);
-        imageView = (ImageView)     findViewById(R.id.image123);
+        //imageView = (ImageView)     findViewById(R.id.image123);
 
         courseNumber.setText(course.getCourseNumber());
         courseName.setText(course.getCourseName());
@@ -182,17 +182,36 @@ public class ViewCourse extends AppCompatActivity {
             if(requestCode == 1){
                 Toast.makeText(ViewCourse.this,"Image Capture Done",Toast.LENGTH_SHORT).show();
                 Bitmap bitmap = (Bitmap) data.getExtras().get("data");
-                imageView.setImageBitmap(bitmap );
+                //imageView.setImageBitmap(bitmap );
                 Uri uri;
                 ByteArrayOutputStream bytes = new ByteArrayOutputStream();
                 bitmap.compress(Bitmap.CompressFormat.JPEG,100,bytes);
                 byte[] arr = bytes.toByteArray();
-                String encoded = Base64.encodeToString(arr, Base64.DEFAULT);
-                Map<String,Object> map = new HashMap<>();
-                map.put("request",true);
-                map.put("image_data",encoded);
+                final String encoded = Base64.encodeToString(arr, Base64.DEFAULT);
+                Map<String,Object> map2 = new HashMap<>();
+                map2.put("done",false);
+                db.collection("server_status").document("status").update(map2).
+                        addOnSuccessListener(
+                                new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void aVoid) {
+                                        Map<String,Object> map = new HashMap<>();
+                                        map.put("request",true);
+                                        map.put("image_data",encoded);
 
-                db.collection("status").document("device_status").set(map);
+                                        db.collection("status").document("device_status").set(map).addOnSuccessListener(
+                                                new OnSuccessListener<Void>() {
+                                                    @Override
+                                                    public void onSuccess(Void aVoid) {
+                                                        Intent intent = new Intent(ViewCourse.this,ShowResult.class);
+                                                        startActivity(intent);
+                                                    }
+                                                }
+                                        );
+                                    }
+                                }
+                        );
+
                 /*
                 Toast.makeText(ViewCourse.this,"Image Capture Done",Toast.LENGTH_SHORT).show();
                 Uri uri = Uri.parse(mCurrentPhotoPath);

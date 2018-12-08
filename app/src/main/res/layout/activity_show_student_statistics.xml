@@ -66,15 +66,21 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Present: 10"
+                android:text="Present: 15"
                 android:textSize="20dp"
                 android:textColor="#009900"/>
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Absent: 10"
+                android:text="Absent: 5"
                 android:textSize="20dp"
                 android:textColor="#AA0000"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Percentage: 75%"
+                android:textSize="20dp"
+                android:textColor="#000000"/>
 
         </LinearLayout>
 
